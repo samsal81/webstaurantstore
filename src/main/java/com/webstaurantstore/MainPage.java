@@ -1,14 +1,9 @@
 package com.webstaurantstore;
-import java.util.List;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.How;
-import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
 public class MainPage {
@@ -21,13 +16,18 @@ public class MainPage {
 
     @FindBy(xpath = "//div[@role='banner']/div[1]/div[1]//input[@name='searchval']") private WebElement searchBox;
     @FindBy(xpath = "//div[@role='banner']/div[1]/div[1]//button[@value='Search']") private WebElement searchBtn;
+    @FindBy(css = "div.product-box-container:last-child input[type='submit']") private WebElement lastItmAddBtn;
+    @FindBy(xpath = "//a[text()='View Cart']") private WebElement viewCartConfBtn;
+    @FindBy(xpath = "//button[text()='Empty Cart']") private WebElement emptyCartBtn;
+    @FindBy(xpath = "//footer//button[text()='Empty']") private WebElement emptyCartConfBtn;
+    @FindBy(xpath = "//p[text()='Your cart is empty.']") private WebElement cartIsEmptyText;
 
-    public void searchForItem(String searchText) {
+    public void SearchForItem(String searchText) {
       searchBox.sendKeys(searchText);
       searchBtn.click();
     }
 
-  public void AssertDisplayedProductsContainKeyword(String keyword) {
+    public void AssertDisplayedProductsContainKeyword(String keyword) {
       int i=1;
       do{
           for (WebElement product : driver.findElements(By.cssSelector("div.product-box-container span.font-semibold.block"))) {
@@ -41,18 +41,13 @@ public class MainPage {
     }
 
     public void AddLastProductAndViewCart(){
-      driver.findElement(By.cssSelector("div.product-box-container:last-child input[type='submit']")).click();
-      driver.findElement(By.xpath("//a[text()='View Cart']")).click();
+      lastItmAddBtn.click();
+      viewCartConfBtn.click();
     }
 
     public void EmptyCartAndAssertEmptyCart(){
-      driver.findElement(By.xpath("//button[text()='Empty Cart']")).click();
-      driver.findElement(By.xpath("//footer//button[text()='Empty']")).click();
-      Assert.assertTrue(driver.findElement(By.xpath("//p[text()='Your cart is empty.']")).isDisplayed());
-    }
-
-    public void WaitForElementDisplayed(WebElement element) {
-      WebDriverWait wait = new WebDriverWait(driver, 30);
-      wait.until(ExpectedConditions.visibilityOf(element));
+      emptyCartBtn.click();
+      emptyCartConfBtn.click();
+      Assert.assertTrue(cartIsEmptyText.isDisplayed());
     }
   }

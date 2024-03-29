@@ -12,7 +12,7 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 
 public class BaseTest {
 
-    WebDriver driver;
+    public WebDriver driver;
 
     @BeforeClass
     public static void setupClass() {
